@@ -16,7 +16,7 @@ namespace SalesWebMvc.Services
         {
             _context = context;
         }
-        public List<Seller> findAll()
+        public List<Seller> FindAll()
         {
             return _context.Seller.ToList();
         }
@@ -25,7 +25,7 @@ namespace SalesWebMvc.Services
             _context.Add(seller);
             _context.SaveChanges();
         }
-        public Seller findById(int id)
+        public Seller FindById(int id)
         {
             return _context.Seller.Include(obj => obj.Department).FirstOrDefault(obj => obj.Id == id);
         }
