@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace SalesWebMvc.Models
@@ -7,10 +8,27 @@ namespace SalesWebMvc.Models
     public class Seller
     {
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "{0} required")]
+        [StringLength(60, MinimumLength = 5, ErrorMessage = "{0} is requires, it shoud be between {2} and {1}")]
         public String Name { get; set; }
+
+        [Required(ErrorMessage = "{0} required")]
+        [DataType(DataType.EmailAddress)]
         public String Email { get; set; }
+
+        [Required(ErrorMessage = "{0} required")]
+        [Display(Name = "Birth Date")] // essa Anotation define como esse campo será exibido
+        [DataType(DataType.Date)] //  especifica o input, nesse caso somente data
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")] // formata a exibição da data
         public DateTime BirthDate { get; set; }
+
+        [Required(ErrorMessage = "{0} required")]
+        [Range(100.0, 50000.0, ErrorMessage = "{0} must be from {1} to {2}")]
+        [Display(Name = "Base Salary")]
+        [DisplayFormat(DataFormatString = "{0:F2}")] // acrescenta casas decimais após a virgula
         public double BaseSalary { get; set; }
+
         public Department Department { get; set; }
         public int DepartmentId { get; set; }
         public ICollection<SalesRecord> Sales { get; set; } = new List<SalesRecord>();

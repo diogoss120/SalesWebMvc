@@ -36,6 +36,16 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Seller seller)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new SellerFormViewModel()
+                {
+                    Departments = _departmentService.FindAll(),
+                    Seller = seller
+                };
+
+                return View(viewModel);
+            }
             _sellerService.Insert(seller);
             return RedirectToAction(nameof(Index));
         }
@@ -94,10 +104,22 @@ namespace SalesWebMvc.Controllers
 
             return View(viewModel);
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Seller seller)
         {
+            if (!ModelState.IsValid)
+            {
+                var viewModel = new SellerFormViewModel()
+                {
+                    Departments = _departmentService.FindAll(),
+                    Seller = seller
+                };
+
+                return View(viewModel);
+            }
+
             if (id != seller.Id)
             {
                 return RedirectToAction(nameof(Error), new { Message = "Id not valid" });
