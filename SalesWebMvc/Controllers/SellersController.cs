@@ -8,6 +8,7 @@ using System.Linq;
 using SalesWebMvc.Services.Exceptions;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SalesWebMvc.Controllers
 {
@@ -70,9 +71,17 @@ namespace SalesWebMvc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            await _sellerService.RemoveAsync(id);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                await _sellerService.RemoveAsync(id);
+                return RedirectToAction(nameof(Index));
+            } catch (DbUpdateException)
+            {
+                return RedirectToAction(nameof(Error), new { Message = "You don't might delete this seller because he has sales"});
+            }
         }
+
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
